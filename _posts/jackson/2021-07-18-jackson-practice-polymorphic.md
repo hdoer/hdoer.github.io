@@ -8,10 +8,8 @@ catalog: true
 header-style: post
 header-img: "img/in-post/city_night.png"
 tags:
-
-  - 基础
-  - Jackson
   - Java
+  - Jackson
   - 多态
 ---
 

@@ -8,10 +8,9 @@ catalog: false
 header-style: post
 header-img: "img/in-post/city_night.png"
 tags:
-  - 基础
-  - command 
-  - linux
-  - mac
+  - Command 
+  - Linux
+  - Mac
 ---
 
 date 命令是工作中经常需要用到的命令，比如：
