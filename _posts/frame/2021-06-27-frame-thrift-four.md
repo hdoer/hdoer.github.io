@@ -1,5 +1,5 @@
 ---
-title: "frame - thrift(三)"
+title: "frame - thrift(四)"
 subtitle: "thrift服务端实现"
 layout: post
 author: "Wentao Dong"
