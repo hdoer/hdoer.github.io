@@ -6,7 +6,7 @@ author: "Wentao Dong"
 date: 2021-07-03 20:00:00
 catalog: false
 header-style: post
-header-img: "img/in-post/city_night.png"
+header-img: "img/city_night.png"
 tags:
   - Command 
   - Curl
@@ -47,7 +47,7 @@ dnslookup: 0.109101 | connect: 0.136887 | appconnect: 0.189107 | pretransfer: 0.
 
 下图展示的是一个典型的使用TLS1.2协议的安全http连接的网络交互过程（直接使用了原图，所以跟上面的时间对不上）：
 
-<img src="2021-07-03-network-timing.assets/Screen-Shot-2018-10-16-at-14.51.29-1.png" alt="img" style="zoom: 50%;" />
+![curl-img](../../img/2021-07-03-network-timing/curl-img.png)
 
 - **time_namelookup** 是DNS解析的时间，上图中的例子，这一步花了不少时间。为了排除DNS解析慢的问题，我们可以在curl命令后面 增加一个参数`--resolve www.baidu.com:443:39.156.66.18`。
 - **time_connect** 是从客户端的角度来看TCP的三次握手的时间。在客户端发出ACK之后结束，不包括服务端收到这个ACK的时间。这个时间与RTT（round-trip time）比较接近。在这个例子中，RTT差不多200毫秒。
@@ -59,11 +59,11 @@ dnslookup: 0.109101 | connect: 0.136887 | appconnect: 0.189107 | pretransfer: 0.
 
 Chrome 还有其他一些测试工具使用的是 [W3C Resource Timing standard](https://www.w3.org/TR/resource-timing/) 标准来计算各种时间指标。在Chrome浏览器的开发者工具中，一次网络请求大概向下图展示的样子：
 
-<img src="2021-07-03-network-timing.assets/Screen-Shot-2018-08-04-at-12.07.37--1-.png" alt="img" style="zoom:50%;" />
+![chrome-img-1](../../img/2021-07-03-network-timing/chrome-img-1.png)
 
 这也是一个典型的使用TLS1.2协议的安全http连接的网络交互过程。我们把上图映射到时序图上，如下图：
 
-<img src="2021-07-03-network-timing.assets/Screen-Shot-2018-10-16-at-14.52.48.png" alt="img" style="zoom:50%;" />
+![chrome-img-2](../../img/2021-07-03-network-timing/chrome-img-2.png)
 
 - **Stalled** （从fetchStart到domainLookupStart）是浏览器执行建立连接之前的这段时间，比如：在磁盘上分配缓存；是否有高优先级的请求；是否已经存在了6个连接（这个是chrome的限制，同一个域名:端口默认最多建立6个TCP连接）
 - **Initial connection** 对应上图的connectStart 到 connectEnd 这段时间，与cURL不同，它包含了建立SSL连接花费的时间，所以RTT的计算公式是：`Initial connection - SSL`。如果是重用了TCP连接，那么DNS Lookup、Initial connection 和 SSL 用时就都没有了，这也反映了使用HTTP/1.1的巨大好处。

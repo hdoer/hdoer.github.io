@@ -6,7 +6,7 @@ author: "Wentao Dong"
 date: 2021-07-18 21:00:00
 catalog: true
 header-style: post
-header-img: "img/in-post/city_night.png"
+header-img: "img/city_night.png"
 tags:
   - Java
   - Jackson
@@ -14,6 +14,7 @@ tags:
 ---
 
 #### Jackson 版本
+
 - 2.6.7
 
 #### 多态类型常用注解
@@ -23,6 +24,7 @@ tags:
 - **@JsonSubTypes**：常与JsonTypeInfo配合使用（不是必须的，如果可以确定类型就不需要，比如use=JsonTypeInfo.Id.CLASS），用于列举子类及对应的类型识别码（类型识别码也可以直接在子类上使用@JsonTypeName定义）
 
 #### **@JsonTypeInfo** 属性**use**: 用于定义类型识别码
+
 - JsonTypeInfo.Id.NONE：不使用类型识别码。此种状态下，类可以正常序列化，但是不产生类型识别码，不能直接反序列化
 
 ```java
@@ -53,7 +55,7 @@ public abstract class Answer {
 // {"answer":{"@class":"org.json.test.AudioAnswer","url":null,"filename":null,"length":null,"text":null}}
 ```
 
-- JsonTypeInfo.Id.MINIMAL_CLASS：使用相对基类路径作为类型识别码，默认识别码名称：@c。此状态下，类型识别码以"."开头。注意如果对象与基类不在同一个文件夹下，直接序列化该对象，产生的识别码是有问题的，需要再包装一层（如下面的Test类包Answer类）。可以修改下面的代码验证一下
+- JsonTypeInfo.Id.MINIMAL_CLASS：使用相对基类路径作为类型识别码，默认识别码名称：@c。此状态下，类型识别码以"."开头。注意如果对象与基类不在同一个文件夹下，直接序列化该对象，产生的识别码还是以"."开头，反序列化时找不到对应的类（因为不在一个包下）。需要再包装一层，如下面的Test类包Answer类，包完以后产生的识别码是完整包路径，这样反序列化就能找到对应的类了。可以修改下面的代码验证一下
 
 ```java
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, defaultImpl = TextAnswer.class)
@@ -176,6 +178,7 @@ public abstract class Answer {
 ```
 
 #### **@JsonTypeInfo** 属性**include**: 用于定义如何将<识别码名称, 识别码> 放到json 序列化出的字符串里
+
 - PROPERTY：默认值，将<识别码名称, 识别码>做为对象的一个属性，形式为{识别码名称:识别码, 对象的其他属性}
 
 ```java
@@ -305,9 +308,11 @@ public abstract class Answer {
 ```
 
 #### **@JsonTypeInfo** 属性**defaultImpl**: 用于指定默认实现
+
 - 用于类别识别码的值缺失或者根据标识码的值没有找到对应的类时的默认类型。如果没有定义默认类型，则当前述情况发生时，将抛出异常
 
 #### **@JsonTypeInfo** 属性**visible**: 用于指定类型识别码可见性
+
 - 类型识别码信息<识别码名称, 识别码> 在反序列化对象时是否可见，默认是不可见的（仅用于确定类型），Jackson将在反序列化对象前删除类型识别码信息
 
 #### Talk is cheap, show me your code
@@ -363,5 +368,6 @@ public class TestMain {
     }
 }
 ```
+
 注意：上述代码中某些属性和方法未列出，如：className, setClassName, getClassName
 纸上得来终觉浅，绝知此事要躬行。前面说的有不理解的，可以动手改改，跑一跑代码，加深理解

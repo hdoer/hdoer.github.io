@@ -6,7 +6,7 @@ author: "Wentao Dong"
 date: 2021-07-14 21:00:00
 catalog: false
 header-style: post
-header-img: "img/in-post/city_night.png"
+header-img: "img/city_night.png"
 tags:
   - Command 
   - Linux
@@ -123,7 +123,7 @@ Tue Jun 15 20:18:48 CST 2021
 系统信息:
 
 ```
-(base) [20:42:17] hdoer @ ~$ uname -a
+~$ uname -a
 Darwin bogon 19.6.0 Darwin Kernel Version 19.6.0: Tue Jan 12 22:13:05 PST 2021; root:xnu-6153.141.16~1/RELEASE_X86_64 x86_64
 ```
 
@@ -216,4 +216,3 @@ monday、tuesday、wednesday、thursday、friday、saturday、sunday
 ~$ date -r test.txt
 2021年 6月15日 星期二 21时37分17秒 CST
 ```
-

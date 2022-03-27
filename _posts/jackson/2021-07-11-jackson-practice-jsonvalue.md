@@ -6,7 +6,7 @@ author: "Wentao Dong"
 date: 2021-07-11 21:00:00
 catalog: true
 header-style: post
-header-img: "img/in-post/city_night.png"
+header-img: "img/city_night.png"
 tags:
   - Java
   - Jackson
@@ -15,6 +15,7 @@ tags:
 ---
 
 #### Jackson 版本
+
 - 2.6.7
 
 #### JsonValue说明
@@ -272,4 +273,3 @@ public class TestMain {
 // {"answer":{"id":null,"minInAnswer":null}}
 // null
 ```
-
