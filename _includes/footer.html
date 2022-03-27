@@ -328,3 +328,16 @@
         });
     });
 </script>
+
+{% if page.mermaid %}
+
+<script>
+function initMermaid() {
+    mermaid.initialize({startOnLoad: true});
+    mermaid.init(undefined, '.language-mermaid');
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" async onload="initMermaid()"></script>
+
+{% endif %}
