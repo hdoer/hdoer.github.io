@@ -103,6 +103,8 @@ sudo vim /etc/fstab
    5. 户挂载权限:user(允许任何用户挂载设备)/nouser(仅root用户挂载)
    
    6. 临时文件执行权限：suid(允许对 suid 和 sgid 位进行操作。它们主要用于允许计算机系统上的用户以临时提升的权限执行二进制可执行文件，以执行特定任务。)/nosuid(不允许) 
+   
+   7. dev/nodev: 在挂载时，是否允许系统把该文件系统里面的 block/character 文件当作是 block/character 文件来处理。进一步解释见下文[fstab 中nodev为什么重要](#fstab 中nodev为什么重要)
 
 5. dump: 是否使用dump对该文件系统备份，0(忽略)/1(备份)，大部分用户没有安装dump，设置为0即可
 
@@ -113,3 +115,37 @@ sudo vim /etc/fstab
 ```
 sudo mount -a
 ```
+
+#### fstab 中nodev为什么重要
+
+dev/nodev 选项意思是在挂载时，是否允许系统把该文件系统里面的 block/character 文件当作是 block/character 文件来处理
+
+默认情况下对底层设备的访问只受文件权限控制，假如一个系统中有个设备/dev/sda，这个设备只允许root用户或root组中的用户访问。这个设备可能是个磁盘、摄像头、话筒。你是一个guest用户，且不在root组中，因此你没有权限访问该设备。
+
+假设你想访问 /dev/sda （然后你几乎可以对磁盘的内容做任何你想做的事情，包括植入一个程序，让你成为 root）。如何做呢，我们举个例子就清楚了
+
+先看下你想访问的目标系统中的设备信息：ls -l /dev/sda
+
+```
+brw-rw----  1 root disk      8,   0 Sep  8 11:25 sda
+```
+
+这是个块设备文件，主设备号为8，次设备号为0，只允许root用户或disk组中的用户访问。很可惜gust不在disk组，不过你可以使用nodev选项挂载USB设备
+
+在另一台电脑上，你是root用户，你可以在你的USB设备上创建一个特殊的文件：
+
+```
+mknod -m 666 usersda b 8 0
+```
+
+没错这个特殊文件的主设备号和次设备号与你/dev/sda相同。而且你对这个特殊文件拥有读写权限
+
+接下来你把这个USB设备挂载到目标系统中，然后你就可以通过这个usersda不受限制的访问之前不能访问的/dev/sda设备了
+
+原因是内核使用这些主设备号和次设备号将设备专用文件与驱动程序进行匹配，因此可以拥有多个指向相同内核驱动程序和设备的文件。
+
+
+
+参考链接
+
+1. [why-is-nodev-in-etc-fstab-so-important](https://unix.stackexchange.com/questions/188601/why-is-nodev-in-etc-fstab-so-important-how-can-character-devices-be-used-for)
